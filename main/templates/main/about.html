@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "staticfiles/css/my_footer_css.css" %}">
+{% endblock %}
+
+{% block content %}
+<div class="bg-white custom-shadow rounded" style="margin-top: 150px;">
+    <h3 class="m-2 p-1"><strong>{{content}}</strong></h3>
+    <p class="m-2 p-1"><strong>{{text_on_page}}</strong></p>
+</div>
+{% endblock %}
+
+{% block footer %}
+    <footer class="py-4 bg-dark" style="height: 50px; ">
+        <div class="container">
+            <p class="text-center text-white" style="margin-top: -10px;">From Me © 2024</p>
+        </div>
+    </footer>
+{% endblock %}
