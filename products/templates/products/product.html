@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block modal_cart %}
+{% include "includes/cart_button.html" %}
+{% endblock  %}
+
 {% block content %}
         <!-- Контент -->
         <div class="container">
@@ -47,10 +51,13 @@
                             </div>
                             <!-- Описание товара -->
                             <div class="card-body">
-                                <p class="card-text">Price: <strong>{{ product.sell_price }} $</strong></p>
+                                <p class="card-text">Цена: <strong>{{ product.sell_price }} $</strong></p>
                                 <h5 class="card-title">{{ product.name }}</h5>
                                 <p class="card-text">{{ product.description }}</p>
-                                <a href="#" class="btn btn-dark add-to-cart">Add to basket</a>
+                                <a href="{% url "cart:cart_add" %}" class="btn btn-dark add-to-cart" 
+                                data-product-id="{{ product.id }}">
+                                    {% csrf_token %}
+                                    Добавить в корзину</a>
                             </div>
                         </div>
                     </div>
