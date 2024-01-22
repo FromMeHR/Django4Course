@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="{% static "staticfiles/css/my_footer_css.css" %}">
 {% endblock %}
 
+{% block modal_cart %}
+{% include "includes/cart_button.html" %}
+{% endblock  %}
+
 {% block content %}
 <div class="bg-white custom-shadow rounded" style="margin-top: 150px;">
     <h3 class="m-2 p-1"><strong>{{content}}</strong></h3>
