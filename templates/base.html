@@ -106,14 +106,16 @@
         <!-- Контент -->
         <div class="container">
             <div class="row mt-1">
-                <div class="col-lg-2">
+                <div class="col-lg-1">
                     <!-- Пустой блок на Ваше усмотрение -->
                 </div>
                 <div class="col-lg-10">
                     <!-- Контент на странице -->
                     {% include "includes/notifications.html" %}
                     {% block content %}{% endblock %}
-
+                </div>
+                <div class="col-lg-1">
+                    <!-- Пустой блок на Ваше усмотрение -->
                 </div>
             </div>
         </div>

@@ -73,10 +73,10 @@
                                         <img src="{% static "staticfiles/images/Not found image.png" %}" class="card-img-top" alt="...">
                                     {% endif %}
                                     <div class="card-body">
-                                        <a href="{% url "catalog:product" product.slug %}">
+                                        <a href="{{ product.get_absolute_url }}">
                                             <p class="card-title">
                                                 {% autoescape off %} <!-- display styles -->
-                                                    {% if product.headline %} <!--created field in usils.py q_search -->
+                                                    {% if product.headline %} <!--created field in utils.py q_search -->
                                                         {{product.headline}}
                                                     {% else %}
                                                         {{product.name}}
@@ -119,11 +119,11 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center my-4">
                                 <div class="custom-shadow d-flex">
-                                    <li class="page-item {% if not products.has_previous %}disabled{% endif %}">
-                                        <a class="page-link" href="{% if products.has_previous %}?{% change_params page=products.previous_page_number %}{% else %}#{% endif %}">Previous</a>
+                                    <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                                        <a class="page-link" href="{% if page_obj.has_previous %}?{% change_params page=page_obj.previous_page_number %}{% else %}#{% endif %}">Previous</a>
                                     </li>
     
-                                    {% if products.number|add:-2 > 1 %}
+                                    {% if page_obj.number|add:-2 > 1 %}
                                         <li class="page-item">
                                             <a class="page-link" href="?{% change_params page=1 %}">1</a>
                                         </li>
@@ -132,26 +132,26 @@
                                         </li>
                                     {% endif %}
     
-                                    {% for page in products.paginator.page_range %}
-                                        {% if page >= products.number|add:-2 and page <= products.number|add:2 %}
-                                            <li class="page-item {% if products.number == page %}active{% endif %}">
+                                    {% for page in page_obj.paginator.page_range %}
+                                        {% if page >= page_obj.number|add:-2 and page <= page_obj.number|add:2 %}
+                                            <li class="page-item {% if page_obj.number == page %}active{% endif %}">
                                                 {% comment %} <a class="page-link" href="?page={{page}}">{{ page }}</a> {% endcomment %}
                                                 <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
                                             </li>
                                         {% endif %}
                                     {% endfor %}
     
-                                    {% if products.number < products.paginator.num_pages|add:-2 %}
+                                    {% if page_obj.number < page_obj.paginator.num_pages|add:-2 %}
                                         <li class="page-item disabled">
                                             <span class="page-link">...</span>
                                         </li>
                                         <li class="page-item">
-                                            <a class="page-link" href="?{% change_params page=products.paginator.num_pages %}">{{ products.paginator.num_pages }}</a>
+                                            <a class="page-link" href="?{% change_params page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
                                         </li>
                                     {% endif %}
     
-                                    <li class="page-item {% if not products.has_next %}disabled{% endif %}">
-                                        <a class="page-link" href="{% if products.has_next %}?{% change_params page=products.next_page_number %}{% else %}#{% endif %}">Next</a>
+                                    <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                                        <a class="page-link" href="{% if page_obj.has_next %}?{% change_params page=page_obj.next_page_number %}{% else %}#{% endif %}">Next</a>
                                     </li>
                                 </div>
                             </ul>
