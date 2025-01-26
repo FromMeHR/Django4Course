@@ -2,14 +2,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib import auth, messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.db.models import Prefetch
 # from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, TemplateView, UpdateView
+
 from carts.models import Cart
 from orders.models import Order, OrderItem
-
+from common.mixins import CacheMixin
 from users.forms import UserLoginForm, UserRegistrationForm, ProfileForm
 
 class UserLoginView(LoginView):
@@ -69,7 +71,7 @@ class UserRegistrationView(CreateView):
         return context
     
     
-class UserProfileView(LoginRequiredMixin, UpdateView): # or FormView
+class UserProfileView(LoginRequiredMixin, CacheMixin, UpdateView): # or FormView
     template_name = 'users/profile.html'
     form_class = ProfileForm
     success_url = reverse_lazy('user:profile')
@@ -88,12 +90,14 @@ class UserProfileView(LoginRequiredMixin, UpdateView): # or FormView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Profile'
-        context['orders'] = Order.objects.filter(user=self.request.user).prefetch_related(
+    
+        orders = Order.objects.filter(user=self.request.user).prefetch_related(
             Prefetch(
                 "orderitem_set", # additional queryset
                 queryset=OrderItem.objects.select_related("product"),
             )
         ).order_by("-id")
+        context['orders'] = self.set_get_cache(orders, f"user_orders_{self.request.user.id}", 60 * 2)
         return context
     
 
